@@ -20,5 +20,16 @@ The suite supports repeated runs per instance and records summary statistics (me
     - `HHL_Test.py` — runs experiments on stored records (ideal/noisy/hardware depending on flags)
 - `Data/`
   - Stores generated `.npy` record files (not tracked by default if large)
+- `Requirements/`
+  - `requirements.txt` — dependencies for setting up a virtual environment
 
 ---
+
+## Installation
+
+It is strongly recommended to create a virtual environment before installing dependencies.
+
+```bash
+python -m venv .venv
+source .venv/bin/activate    # Windows: .venv\Scripts\activate
+pip install -r Requirements/requirements.txt
