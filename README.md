@@ -13,15 +13,15 @@ The suite supports repeated runs per instance and records summary statistics (me
 
 - `Code/`
   - `help_classes/`
-    - `wrapper_hhl.py` — main HHL wrapper implementation (PennyLane + Qiskit paths)
+    - `wrapper_hhl.py` - main HHL wrapper implementation (PennyLane + Qiskit paths)
   - `instance_generation/`
-    - `Data_For_Experiments.py` — generates and stores benchmark instances / records (`.npy`)
+    - `Data_For_Experiments.py` - generates and stores benchmark instances / records (`.npy`)
   - `test_HHL/`
-    - `HHL_Test.py` — runs experiments on stored records (ideal/noisy/hardware depending on flags)
+    - `HHL_Test.py` - runs experiments on stored records (ideal/noisy/hardware depending on flags)
 - `Data/`
   - Stores generated `.npy` record files (not tracked by default if large)
 - `Requirements/`
-  - `requirements.txt` — dependencies for setting up a virtual environment
+  - `requirements.txt` - dependencies for setting up a virtual environment
 
 ---
 
