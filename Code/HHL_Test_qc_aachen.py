@@ -10,15 +10,20 @@ from   datetime                 import datetime
 # Qiskit Runtime service for IBM Quantum hardware execution (authentication + backend access)
 from   qiskit_ibm_runtime       import QiskitRuntimeService
 
-# sys for reading command-line arguments (cond_numbr_global, index)
+# sys for reading command-line arguments (cond_numbr_global, flag_neg)
 import sys
 
 # Print NumPy floating-point numbers with fixed precision for readable logs
 np.set_printoptions(precision=4)
 
-# Read selected condition number from CLI (used to pick the corresponding records file)
-cond_numbr_global = float(sys.argv[1])
+# Read selected condition number and spectrum class from CLI:
+# - sys.argv[1]: condition number (int; one of 2, 3, 4, 5)
+# - sys.argv[2]: negative-eigenvalue flag (int; 0 = positive-definite, 1 = indefinite / mixed-sign)
+cond_numbr_global = int(sys.argv[1])
+flag_neg          = int(sys.argv[2])
 
+# Example execution (condition number = 2, flag_neg = 0):
+# python3 HHL_Test_qc_aachen.py 2 0
 
 
 #####
@@ -30,16 +35,30 @@ path             = "../Data/"
 
 # Select which precomputed record file to load based on the requested condition number
 if   cond_numbr_global == 2:
-    records_name = "records_CN_2_5_FN_0_1_FT_1_5_NS_10000_NE_10_ni_8_20250902-1520_CN_2.0_FN_0_20250918_114402_qc_min"
+    if   flag_neg == 0:
+        records_name = "records_CN_2_5_FN_0_1_FT_1_5_NS_10000_NE_10_ni_8_20250902-1520_CN_2.0_FN_0_20250918_114402_qc_min"
+    elif flag_neg == 1:
+        records_name = "records_CN_2_5_FN_0_1_FT_1_5_NS_10000_NE_10_ni_8_20250902-1520_CN_2.0_FN_1_20250918_192906_qc_min"
 
 elif cond_numbr_global == 3:
-    records_name = "records_CN_2_5_FN_0_1_FT_1_5_NS_10000_NE_10_ni_8_20250902-1520_CN_3.0_FN_0_20250918_132207_qc_min"
+    if   flag_neg == 0:
+        records_name = "records_CN_2_5_FN_0_1_FT_1_5_NS_10000_NE_10_ni_8_20250902-1520_CN_3.0_FN_0_20250918_132207_qc_min"
+    elif flag_neg == 1:
+        records_name = "records_CN_2_5_FN_0_1_FT_1_5_NS_10000_NE_10_ni_8_20250902-1520_CN_3.0_FN_1_20250918_194100_qc_min"
 
 elif cond_numbr_global == 4:
-    records_name = "records_CN_2_5_FN_0_1_FT_1_5_NS_10000_NE_10_ni_8_20250902-1520_CN_4.0_FN_0_20250918_115954_qc_min"
+    if   flag_neg == 0:
+        records_name = "records_CN_2_5_FN_0_1_FT_1_5_NS_10000_NE_10_ni_8_20250902-1520_CN_4.0_FN_0_20250918_115954_qc_min"
+    elif flag_neg == 1:
+        records_name = "records_CN_2_5_FN_0_1_FT_1_5_NS_10000_NE_10_ni_8_20250902-1520_CN_4.0_FN_1_20250920_000208_qc_min"
 
 elif cond_numbr_global == 5:
-    records_name = "records_CN_2_5_FN_0_1_FT_1_5_NS_10000_NE_10_ni_8_20250902-1520_CN_5.0_FN_0_20250918_053526_qc_min"
+    if   flag_neg == 0:
+        records_name = "records_CN_2_5_FN_0_1_FT_1_5_NS_10000_NE_10_ni_8_20250902-1520_CN_5.0_FN_0_20250918_053526_qc_min"
+    elif flag_neg == 1:
+        records_name = "records_CN_2_5_FN_0_1_FT_1_5_NS_10000_NE_10_ni_8_20250902-1520_CN_5.0_FN_1_20250918_084838_qc_min"
+
+
 
 # Load records (structured NumPy array); allow_pickle=True because dtype contains object fields (e.g., A, b)
 records      = np.load(file         = path + records_name + ".npy",
@@ -57,7 +76,8 @@ print("records name:       ", records_name     )
 print("")
 print("Conditional Number: ", cond_numbr_global)
 print("")
-
+print("Spectrum flag:      ", flag_neg         )
+print("")
 
 #####
 # start
@@ -93,7 +113,7 @@ for i in range(len(records)):
 
 
         #####
-        # QS Aachen noisy
+        # QS Aachen qc
         #####
 
         # Execute QS-based HHL targeting IBM Aachen with qc transpilation and real-hardware execution enabled
@@ -165,4 +185,6 @@ print("")
 print("Records Name:       ", records_name     )
 print("")
 print("Conditional Number: ", cond_numbr_global)
+print("")
+print("Spectrum flag:      ", flag_neg         )
 print("")
